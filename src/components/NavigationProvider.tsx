@@ -1,15 +1,27 @@
 import { createStaticNavigation } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import useAuthUserIsNotSignedIn from '@src/hooks/useAuthUserIsNotSignedIn'
 import useFirebaseAuthUser from '@src/hooks/useFirebaseAuthUser'
+import { lazy } from 'react'
 
-const NonAuthNavigation = createStaticNavigation(
+const Navigation = createStaticNavigation(
   createNativeStackNavigator({
-    initialRouteName: 'SplashScreen',
-    screens: {
-      SplashScreen: {
-        screen: () => null,
-        options: {
-          headerShown: false,
+    screenOptions: {
+      headerShown: false,
+    },
+    groups: {
+      NotSignedIn: {
+        if: useAuthUserIsNotSignedIn,
+        screens: {
+          NonSignedInNavigator: createNativeStackNavigator({
+            initialRouteName: 'Welcome',
+            screenOptions: {
+              headerShown: false,
+            },
+            screens: {
+              Welcome: lazy(() => import('@src/screens/WelcomeScreen')),
+            },
+          }),
         },
       },
     },
@@ -23,7 +35,7 @@ const NavigationProvider = () => {
     return null
   }
 
-  return <NonAuthNavigation />
+  return <Navigation />
 }
 
 export default NavigationProvider

@@ -6,7 +6,13 @@ import SplashScreen from '@src/screens/SplashScreen'
 import StatusBarGeneral from '@src/components/StatusBarGeneral'
 import FirebaseAuthUserProvider from '@src/providers/FirebaseAuthUserProvider'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+    },
+  },
+})
 
 const App = () => (
   <SafeAreaProvider>

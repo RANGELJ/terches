@@ -5,10 +5,11 @@ import {
 } from '@react-native-firebase/auth'
 import FirebaseAuthUserContext from '@src/context/FirebaseAuthUserContext'
 import waitMilliseconds from '@src/shared/waitMilliseconds'
+import type { ReactQueryKey } from '@src/types/ReactQueryKey'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { PropsWithChildren, useEffect } from 'react'
 
-const queryKey = ['firebase/auth', 'state']
+const queryKey: ReactQueryKey = ['firebase/auth', 'state']
 
 const FirebaseAuthUserProvider = ({ children }: PropsWithChildren) => {
   const { data: authUser } = useSuspenseQuery<FirebaseAuthTypes.User | null>({
