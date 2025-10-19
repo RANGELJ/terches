@@ -1,24 +1,12 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import useNavigate from '@src/hooks/useNavigate'
-import { StyleSheet, Text, View } from 'react-native'
+import SafeAreaView from '@src/components/SafeAreaView'
+import { Text } from 'react-native'
 
 const SplashScreen = () => {
-  const navigate = useNavigate()
-
   return (
-    <View style={styles.frame}>
+    <SafeAreaView>
       <Text>Splash screen</Text>
-    </View>
+    </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  frame: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
 
 export default SplashScreen
