@@ -1,32 +1,38 @@
-import { createStaticNavigation } from '@react-navigation/native'
+import {
+  createStaticNavigation,
+  StaticParamList,
+} from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import useAuthUserIsNotSignedIn from '@src/hooks/useAuthUserIsNotSignedIn'
 import useFirebaseAuthUser from '@src/hooks/useFirebaseAuthUser'
 import { lazy } from 'react'
 
-const Navigation = createStaticNavigation(
-  createNativeStackNavigator({
-    screenOptions: {
-      headerShown: false,
+const RootStack = createNativeStackNavigator({
+  initialRouteName: 'Welcome',
+  screenOptions: {
+    headerShown: false,
+  },
+  screens: {
+    Welcome: {
+      if: useAuthUserIsNotSignedIn,
+      screen: lazy(() => import('@src/screens/WelcomeScreen')),
     },
-    groups: {
-      NotSignedIn: {
-        if: useAuthUserIsNotSignedIn,
-        screens: {
-          NonSignedInNavigator: createNativeStackNavigator({
-            initialRouteName: 'Welcome',
-            screenOptions: {
-              headerShown: false,
-            },
-            screens: {
-              Welcome: lazy(() => import('@src/screens/WelcomeScreen')),
-            },
-          }),
-        },
-      },
+    Login: {
+      if: useAuthUserIsNotSignedIn,
+      screen: () => null,
     },
-  })
-)
+  },
+})
+
+const Navigation = createStaticNavigation(RootStack)
+
+export type RootStackParamList = StaticParamList<typeof RootStack>
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParamList {}
+  }
+}
 
 const NavigationProvider = () => {
   const authUser = useFirebaseAuthUser()
