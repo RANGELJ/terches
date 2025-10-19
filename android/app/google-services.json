@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "77273821957",
+    "firebase_url": "https://terches-310ee-default-rtdb.firebaseio.com",
+    "project_id": "terches-310ee",
+    "storage_bucket": "terches-310ee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77273821957:android:83054e2dd9f5e228313d6c",
+        "android_client_info": {
+          "package_name": "com.rangel.terches.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLPJbuVtfeYdUAne7sm-md4kORGbCShzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

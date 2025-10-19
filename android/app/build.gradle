@@ -2,6 +2,9 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
+// Firebase app configuration https://rnfirebase.io/#configure-firebase-with-android-credentials
+apply plugin: 'com.google.gms.google-services'
+
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -79,7 +82,7 @@ android {
 
     namespace "com.terches"
     defaultConfig {
-        applicationId "com.terches"
+        applicationId "com.rangel.terches.dev"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
