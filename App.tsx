@@ -1,45 +1,33 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import { StyleSheet } from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import StatusBarGeneral from '@src/components/StatusBarGeneral'
+import RouterProvider from '@src/components/RouterProvider'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+const queryClient = new QueryClient()
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+const App = () => (
+  <SafeAreaProvider>
+    <StatusBarGeneral />
+    <QueryClientProvider client={queryClient}>
       <AppContent />
-    </SafeAreaProvider>
-  );
-}
+    </QueryClientProvider>
+  </SafeAreaProvider>
+)
 
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
+const AppContent = () => {
   return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
+    <SafeAreaView style={styles.safeArea}>
+      <RouterProvider />
+    </SafeAreaView>
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
+    backgroundColor: 'white',
   },
-});
+})
 
-export default App;
+export default App
