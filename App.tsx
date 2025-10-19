@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Suspense } from 'react'
-import NavigationProvider from '@src/components/NavigationProvider'
+import Navigation from '@src/components/Navigation'
 import SplashScreen from '@src/screens/SplashScreen'
 import StatusBarGeneral from '@src/components/StatusBarGeneral'
 import FirebaseAuthUserProvider from '@src/providers/FirebaseAuthUserProvider'
@@ -20,7 +20,7 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={<SplashScreen />}>
         <FirebaseAuthUserProvider>
-          <NavigationProvider />
+          <Navigation />
         </FirebaseAuthUserProvider>
       </Suspense>
     </QueryClientProvider>

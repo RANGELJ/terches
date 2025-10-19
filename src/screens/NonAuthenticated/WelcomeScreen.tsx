@@ -1,12 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import SafeAreaView from '@src/components/SafeAreaView'
 import { colors } from '@src/shared/colors'
 import type { ReactQueryKey } from '@src/types/ReactQueryKey'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import SplashScreen from '@src/screens/SplashScreen'
-import { useNavigation } from '@react-navigation/native'
+import useNavigation from '@src/hooks/useNavigation'
+import useSafeAreaViewStyleInsets from '@src/hooks/useSafeAreaViewStyleInsets'
+import buttonStyle from '@src/styles/buttonStyle'
 
 const queryKey: ReactQueryKey = ['localStorage', 'hasSeenWelcomePage']
 
@@ -29,8 +30,10 @@ const Welcome = () => {
     },
   })
 
-  const navigation = useNavigation()
+  const navigation = useNavigation<'NonAuthenticated'>()
   const [step, setStep] = useState(0)
+
+  const safeAreaStyleInsets = useSafeAreaViewStyleInsets()
 
   useEffect(() => {
     if (hasSeenWelcomePage) {
@@ -63,7 +66,7 @@ const Welcome = () => {
   }
 
   return (
-    <SafeAreaView>
+    <View style={safeAreaStyleInsets}>
       <View style={styles.page}>
         <View style={styles.header}>
           <TouchableOpacity
@@ -108,14 +111,14 @@ const Welcome = () => {
         </View>
         {step === 2 && (
           <TouchableOpacity
-            style={styles.startButton}
+            style={[buttonStyle, styles.startButton]}
             onPress={() => markHasSeenWelcomePage.mutate()}
           >
             <Text style={styles.startButtonText}>Iniciar</Text>
           </TouchableOpacity>
         )}
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -177,8 +180,6 @@ const styles = StyleSheet.create({
   },
   startButton: {
     backgroundColor: colors.primary[500],
-    paddingVertical: 10,
-    paddingHorizontal: 20,
   },
   startButtonText: {
     color: colors.secondary[50],
