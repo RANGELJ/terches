@@ -4,7 +4,6 @@ import {
 } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import useAuthUserIsNotSignedIn from '@src/hooks/useAuthUserIsNotSignedIn'
-import useFirebaseAuthUser from '@src/hooks/useFirebaseAuthUser'
 import { lazy } from 'react'
 
 const RootStack = createNativeStackNavigator({
@@ -19,12 +18,10 @@ const RootStack = createNativeStackNavigator({
     },
     Login: {
       if: useAuthUserIsNotSignedIn,
-      screen: () => null,
+      screen: lazy(() => import('@src/screens/LoginScreen')),
     },
   },
 })
-
-const Navigation = createStaticNavigation(RootStack)
 
 export type RootStackParamList = StaticParamList<typeof RootStack>
 
@@ -34,14 +31,6 @@ declare global {
   }
 }
 
-const NavigationProvider = () => {
-  const authUser = useFirebaseAuthUser()
-
-  if (authUser) {
-    return null
-  }
-
-  return <Navigation />
-}
+const NavigationProvider = createStaticNavigation(RootStack)
 
 export default NavigationProvider

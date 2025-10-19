@@ -11,27 +11,26 @@ import { useNavigation } from '@react-navigation/native'
 const queryKey: ReactQueryKey = ['localStorage', 'hasSeenWelcomePage']
 
 const POSITIVE_VALUE = '1'
+const KEY_VALUE = 'hasSeenWelcomePage'
 
 const Welcome = () => {
   const { data: hasSeenWelcomePage } = useSuspenseQuery({
     queryKey,
     queryFn: async () => {
-      const rawValue = await AsyncStorage.getItem('hasSeenWelcomePage')
+      const rawValue = await AsyncStorage.getItem(KEY_VALUE)
       return rawValue === POSITIVE_VALUE
     },
   })
 
   const markHasSeenWelcomePage = useMutation<void, Error>({
     mutationFn: async (_, { client }) => {
-      await AsyncStorage.setItem('hasSeenWelcomePage', POSITIVE_VALUE)
+      await AsyncStorage.setItem(KEY_VALUE, POSITIVE_VALUE)
       client.setQueryData(queryKey, POSITIVE_VALUE)
     },
   })
 
   const navigation = useNavigation()
   const [step, setStep] = useState(0)
-
-  console.log('hasSeenWelcomePage', hasSeenWelcomePage)
 
   useEffect(() => {
     if (hasSeenWelcomePage) {
