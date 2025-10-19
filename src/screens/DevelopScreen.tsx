@@ -1,17 +1,39 @@
+import useDebugLogValue from '@src/hooks/useDebugLogValue'
+import useHasSeenWelcomePage from '@src/hooks/useHasSeenWelcomePage'
+import useHasSeenWelcomePageMutation from '@src/hooks/useHasSeenWelcomePageMutation'
 import useNavigation from '@src/hooks/useNavigation'
 import useSafeAreaViewStyleInsets from '@src/hooks/useSafeAreaViewStyleInsets'
 import { colors } from '@src/shared/colors'
 import buttonStyle from '@src/styles/buttonStyle'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+  StatusBar,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 
 const DevelopScreen = () => {
   const safeAreaStyleInsets = useSafeAreaViewStyleInsets()
   const navigation = useNavigation<'Root'>()
+  const hasSeenWelcomePage = useHasSeenWelcomePage()
+  const markHasSeenWelcomePage = useHasSeenWelcomePageMutation()
+  useDebugLogValue('hasSeenWelcomePage', hasSeenWelcomePage)
 
   return (
     <View style={[styles.page, safeAreaStyleInsets]}>
+      <StatusBar barStyle="dark-content" />
       <View style={styles.content}>
         <Text style={styles.title}>Development screen</Text>
+        <View style={styles.switchOptionContainer}>
+          <Text>Has seen welcome page</Text>
+          <Switch
+            value={hasSeenWelcomePage}
+            disabled={markHasSeenWelcomePage.isPending}
+            onValueChange={markHasSeenWelcomePage.mutate}
+          />
+        </View>
         <TouchableOpacity
           style={[buttonStyle, styles.optionButton]}
           onPress={() => {
@@ -45,6 +67,12 @@ const styles = StyleSheet.create({
     color: colors.primary[500],
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  switchOptionContainer: {
+    width: '90%',
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 })
 

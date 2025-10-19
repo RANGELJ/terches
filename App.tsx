@@ -3,7 +3,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Suspense } from 'react'
 import Navigation from '@src/components/Navigation'
 import SplashScreen from '@src/screens/SplashScreen'
-import StatusBarGeneral from '@src/components/StatusBarGeneral'
 import FirebaseAuthUserProvider from '@src/providers/FirebaseAuthUserProvider'
 
 const queryClient = new QueryClient({
@@ -16,7 +15,6 @@ const queryClient = new QueryClient({
 
 const App = () => (
   <SafeAreaProvider>
-    <StatusBarGeneral />
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={<SplashScreen />}>
         <FirebaseAuthUserProvider>

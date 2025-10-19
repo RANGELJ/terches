@@ -1,49 +1,15 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { colors } from '@src/shared/colors'
-import type { ReactQueryKey } from '@src/types/ReactQueryKey'
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import SplashScreen from '@src/screens/SplashScreen'
-import useNavigation from '@src/hooks/useNavigation'
 import useSafeAreaViewStyleInsets from '@src/hooks/useSafeAreaViewStyleInsets'
 import buttonStyle from '@src/styles/buttonStyle'
-
-const queryKey: ReactQueryKey = ['localStorage', 'hasSeenWelcomePage']
-
-const POSITIVE_VALUE = '1'
-const KEY_VALUE = 'hasSeenWelcomePage'
+import useHasSeenWelcomePageMutation from '@src/hooks/useHasSeenWelcomePageMutation'
 
 const Welcome = () => {
-  const { data: hasSeenWelcomePage } = useSuspenseQuery({
-    queryKey,
-    queryFn: async () => {
-      const rawValue = await AsyncStorage.getItem(KEY_VALUE)
-      return rawValue === POSITIVE_VALUE
-    },
-  })
-
-  const markHasSeenWelcomePage = useMutation<void, Error>({
-    mutationFn: async (_, { client }) => {
-      await AsyncStorage.setItem(KEY_VALUE, POSITIVE_VALUE)
-      client.setQueryData(queryKey, POSITIVE_VALUE)
-    },
-  })
-
-  const navigation = useNavigation<'NonAuthenticated'>()
   const [step, setStep] = useState(0)
 
   const safeAreaStyleInsets = useSafeAreaViewStyleInsets()
-
-  useEffect(() => {
-    if (hasSeenWelcomePage) {
-      navigation.navigate('Login')
-    }
-  }, [hasSeenWelcomePage, navigation])
-
-  if (hasSeenWelcomePage) {
-    return <SplashScreen />
-  }
+  const markHasSeenWelcomePage = useHasSeenWelcomePageMutation()
 
   let subtitle: string
   let description: string
@@ -71,7 +37,7 @@ const Welcome = () => {
         <View style={styles.header}>
           <TouchableOpacity
             disabled={markHasSeenWelcomePage.isPending}
-            onPress={() => markHasSeenWelcomePage.mutate()}
+            onPress={() => markHasSeenWelcomePage.mutate(true)}
           >
             <Text>Omitir</Text>
           </TouchableOpacity>
@@ -112,7 +78,7 @@ const Welcome = () => {
         {step === 2 && (
           <TouchableOpacity
             style={[buttonStyle, styles.startButton]}
-            onPress={() => markHasSeenWelcomePage.mutate()}
+            onPress={() => markHasSeenWelcomePage.mutate(true)}
           >
             <Text style={styles.startButtonText}>Iniciar</Text>
           </TouchableOpacity>
