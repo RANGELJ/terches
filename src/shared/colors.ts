@@ -11,6 +11,7 @@ export const colors = {
     500: '#691423',
   },
   error: {
+    100: '#ffe2e2',
     500: '#fb2c36',
   },
 } as const

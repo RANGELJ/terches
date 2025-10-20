@@ -19,6 +19,11 @@ import buttonPrimaryStyle from '@src/styles/buttonPrimaryStyle'
 import buttonPrimaryTextStyle from '@src/styles/buttonPrimaryTextStyle'
 import ArrowRightAlt from '@src/assets/svg/ArrowRightAlt'
 import ImageCropPicker from 'react-native-image-crop-picker'
+import { useState } from 'react'
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+} from '@react-native-firebase/auth'
 
 const CreateUserScreen = () => {
   const openImagePicker = useMutation({
@@ -69,6 +74,20 @@ const CreateUserScreen = () => {
   })
 
   const image = openImagePicker.data
+  const [email, setEmail] = useState(__DEV__ ? 'georgeranpe@gmail.com' : '')
+  const [password, setPassword] = useState(__DEV__ ? '1234567890' : '')
+  const [passwordConfirmation, setPasswordConfirmation] = useState(
+    __DEV__ ? '1234567890' : ''
+  )
+
+  const createUser = useMutation({
+    mutationFn: async () => {
+      if (password !== passwordConfirmation) {
+        throw new Error('Las constraseñas no coinciden')
+      }
+      await createUserWithEmailAndPassword(getAuth(), email, password)
+    },
+  })
 
   return (
     <View style={styles.page}>
@@ -92,14 +111,23 @@ const CreateUserScreen = () => {
       )}
       <View style={styles.inputView}>
         <Text style={styles.inputLabel}>Correo electronico</Text>
-        <TextInput style={textInputStyle} placeholder="usuario@gmail.com" />
+        <TextInput
+          style={textInputStyle}
+          placeholder="usuario@gmail.com"
+          readOnly={createUser.isPending}
+          value={email}
+          onChangeText={setEmail}
+        />
       </View>
       <View style={styles.inputView}>
         <Text style={styles.inputLabel}>Contraseña</Text>
         <TextInput
           style={textInputStyle}
           placeholder="Contraseña"
+          readOnly={createUser.isPending}
           secureTextEntry
+          value={password}
+          onChangeText={setPassword}
         />
       </View>
       <View style={styles.inputView}>
@@ -107,10 +135,17 @@ const CreateUserScreen = () => {
         <TextInput
           style={textInputStyle}
           placeholder="Contraseña"
+          readOnly={createUser.isPending}
           secureTextEntry
+          value={passwordConfirmation}
+          onChangeText={setPasswordConfirmation}
         />
       </View>
-      <TouchableOpacity style={[buttonPrimaryStyle, styles.nextButton]}>
+      <TouchableOpacity
+        style={[buttonPrimaryStyle, styles.nextButton]}
+        disabled={createUser.isPending}
+        onPress={() => createUser.mutate()}
+      >
         <Text style={buttonPrimaryTextStyle}>Siguiente</Text>
         <ArrowRightAlt size={25} fill={colors.secondary[100]} />
       </TouchableOpacity>
