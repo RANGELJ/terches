@@ -5,19 +5,16 @@ import not from '@src/shared/not'
 import { lazy } from 'react'
 
 const NonAuthenticatedStack = createNativeStackNavigator({
+  screenOptions: {
+    headerShown: false,
+  },
   screens: {
     Welcome: {
       if: not(useHasSeenWelcomePage),
-      options: {
-        headerShown: false,
-      },
       screen: lazy(() => import('@src/screens/NonAuthenticated/WelcomeScreen')),
     },
     Login: {
       if: useHasSeenWelcomePage,
-      options: {
-        headerShown: false,
-      },
       screen: lazy(() => import('@src/screens/NonAuthenticated/LoginScreen')),
     },
   },

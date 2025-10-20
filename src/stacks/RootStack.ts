@@ -5,28 +5,20 @@ import { lazy } from 'react'
 import not from '@src/shared/not'
 
 const RootStack = createNativeStackNavigator({
-  initialRouteName: __DEV__ ? 'Develop' : 'NonAuthenticated',
+  screenOptions: {
+    headerShown: false,
+  },
   screens: {
     Develop: {
-      options: {
-        headerShown: false,
-      },
-      screen: __DEV__
-        ? lazy(() => import('@src/screens/DevelopScreen'))
-        : () => null,
+      if: () => __DEV__,
+      screen: lazy(() => import('@src/screens/DevelopScreen')),
     },
     NonAuthenticated: {
       if: not(useAuthUserIsSignedIn),
-      options: {
-        headerShown: false,
-      },
       screen: NonAuthenticatedStack,
     },
     Authenticated: {
       if: useAuthUserIsSignedIn,
-      options: {
-        headerShown: false,
-      },
       screen: () => null,
     },
   },
