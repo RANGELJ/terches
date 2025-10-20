@@ -7,7 +7,12 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Alert,
 } from 'react-native'
+import {
+  request as requestPermissions,
+  openSettings,
+} from 'react-native-permissions'
 import { useMutation } from '@tanstack/react-query'
 import textInputStyle from '@src/styles/textInputStyle'
 import buttonPrimaryStyle from '@src/styles/buttonPrimaryStyle'
@@ -24,6 +29,34 @@ const CreateUserScreen = () => {
       return false
     },
     mutationFn: async () => {
+      const permissionStatus = await requestPermissions(
+        'android.permission.CAMERA',
+        {
+          title: 'Permiso de Cámara',
+          message:
+            'Necesitamos acceso a tu cámara para que puedas tomar una foto y usarla como tu foto de perfil.',
+          buttonPositive: 'Aceptar',
+        }
+      )
+
+      if (permissionStatus === 'blocked') {
+        Alert.alert(
+          'Permiso denegado',
+          'El permiso para usar la camara fue denegado, por favor activalo en los ajustes de tu celular para tomar una foto de perfil.',
+          [
+            {
+              text: 'Cancelar',
+              style: 'cancel',
+            },
+            {
+              text: 'Abrir ajustes',
+              onPress: async () => await openSettings(),
+            },
+          ]
+        )
+        return
+      }
+
       const image = await ImageCropPicker.openCamera({
         mediaType: 'photo',
         width: 500,
