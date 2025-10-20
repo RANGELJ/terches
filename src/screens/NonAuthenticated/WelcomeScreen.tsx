@@ -2,9 +2,10 @@ import { colors } from '@src/shared/colors'
 import { useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import useSafeAreaViewStyleInsets from '@src/hooks/useSafeAreaViewStyleInsets'
-import buttonStyle from '@src/styles/buttonStyle'
 import useHasSeenWelcomePageMutation from '@src/hooks/useHasSeenWelcomePageMutation'
 import titleStyle from '@src/styles/titleStyle'
+import buttonPrimaryStyle from '@src/styles/buttonPrimaryStyle'
+import buttonPrimaryTextStyle from '@src/styles/buttonPrimaryTextStyle'
 
 const Welcome = () => {
   const [step, setStep] = useState(0)
@@ -78,10 +79,10 @@ const Welcome = () => {
         </View>
         {step === 2 && (
           <TouchableOpacity
-            style={[buttonStyle, styles.startButton]}
+            style={buttonPrimaryStyle}
             onPress={() => markHasSeenWelcomePage.mutate(true)}
           >
-            <Text style={styles.startButtonText}>Iniciar</Text>
+            <Text style={buttonPrimaryTextStyle}>Iniciar</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -137,12 +138,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     color: colors.secondary[300],
-  },
-  startButton: {
-    backgroundColor: colors.primary[500],
-  },
-  startButtonText: {
-    color: colors.secondary[50],
   },
 })
 

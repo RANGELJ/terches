@@ -1,7 +1,10 @@
 import SafeAreaView from '@src/components/SafeAreaView'
 import useNavigation from '@src/hooks/useNavigation'
 import { colors } from '@src/shared/colors'
+import buttonPrimaryStyle from '@src/styles/buttonPrimaryStyle'
+import buttonPrimaryTextStyle from '@src/styles/buttonPrimaryTextStyle'
 import buttonStyle from '@src/styles/buttonStyle'
+import textInputStyle from '@src/styles/textInputStyle'
 import titleStyle from '@src/styles/titleStyle'
 import {
   View,
@@ -29,17 +32,20 @@ const LoginScreen = () => {
           resizeMode="contain"
         />
         <Text style={titleStyle}>Iniciar Sesion</Text>
-        <TextInput placeholder="Correo" style={styles.textInput} />
+        <TextInput
+          placeholder="Correo"
+          style={[textInputStyle, styles.input]}
+        />
         <TextInput
           placeholder="Contraseña"
-          style={styles.textInput}
+          style={[textInputStyle, styles.input]}
           secureTextEntry
         />
         <View>
           <Text>Olvidaste tu contraseña?</Text>
         </View>
-        <TouchableOpacity style={[buttonStyle, styles.loginButton]}>
-          <Text style={styles.loginButtonText}>Iniciar Sesion</Text>
+        <TouchableOpacity style={[buttonPrimaryStyle, styles.loginButton]}>
+          <Text style={buttonPrimaryTextStyle}>Iniciar Sesion</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[buttonStyle, styles.withoutLoginButton]}>
           <Text style={styles.withoutLoginText}>Comienza sin registrarte</Text>
@@ -69,19 +75,11 @@ const styles = StyleSheet.create({
     width: '90%',
     height: 200,
   },
-  textInput: {
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
+  input: {
     width: '90%',
-    borderRadius: 15,
-    height: 50,
   },
   loginButton: {
-    backgroundColor: colors.primary[500],
     width: '90%',
-  },
-  loginButtonText: {
-    color: colors.secondary[100],
   },
   withoutLoginButton: {
     borderColor: colors.primary[500],
