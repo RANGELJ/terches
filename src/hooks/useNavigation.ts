@@ -1,6 +1,6 @@
 import { NavigationProp, StaticParamList } from '@react-navigation/native'
 import type NonAuthenticatedStack from '@src/navigators/NonAuthenticatedStack'
-import type RootStack from '@src/navigators/MainRootStack'
+import type RootStack from '@src/navigators/RootStack'
 import { useNavigation as useNavigationBase } from '@react-navigation/native'
 
 type ParamLists = {
