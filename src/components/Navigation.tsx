@@ -1,5 +1,5 @@
 import { createStaticNavigation } from '@react-navigation/native'
-import RootStack from '@src/navigators/MainRootStack'
+import RootStack from '@src/navigators/RootStack'
 
 const Navigation = createStaticNavigation(RootStack)
 
