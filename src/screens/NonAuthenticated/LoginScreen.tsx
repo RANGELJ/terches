@@ -1,4 +1,5 @@
 import SafeAreaView from '@src/components/SafeAreaView'
+import useNavigation from '@src/hooks/useNavigation'
 import { colors } from '@src/shared/colors'
 import buttonStyle from '@src/styles/buttonStyle'
 import titleStyle from '@src/styles/titleStyle'
@@ -14,6 +15,8 @@ import {
 } from 'react-native'
 
 const LoginScreen = () => {
+  const navigation = useNavigation<'NonAuthenticated'>()
+
   return (
     <SafeAreaView>
       <KeyboardAvoidingView
@@ -41,10 +44,15 @@ const LoginScreen = () => {
         <TouchableOpacity style={[buttonStyle, styles.withoutLoginButton]}>
           <Text style={styles.withoutLoginText}>Comienza sin registrarte</Text>
         </TouchableOpacity>
-        <View>
+        <TouchableOpacity
+          style={styles.notAccountView}
+          onPress={() => {
+            navigation.navigate('CreateUser')
+          }}
+        >
           <Text>Aun no tienes cuenta?</Text>
-          <Text>Registrate</Text>
-        </View>
+          <Text style={styles.noAccountText}>Registrate</Text>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>
   )
@@ -82,6 +90,13 @@ const styles = StyleSheet.create({
   },
   withoutLoginText: {
     color: colors.primary[500],
+  },
+  notAccountView: {
+    alignItems: 'center',
+  },
+  noAccountText: {
+    color: colors.primary[500],
+    fontWeight: 'bold',
   },
 })
 

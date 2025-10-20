@@ -17,6 +17,10 @@ const NonAuthenticatedStack = createNativeStackNavigator({
       if: useHasSeenWelcomePage,
       screen: lazy(() => import('@src/screens/NonAuthenticated/LoginScreen')),
     },
+    CreateUser: {
+      if: useHasSeenWelcomePage,
+      screen: () => null,
+    },
   },
 })
 
