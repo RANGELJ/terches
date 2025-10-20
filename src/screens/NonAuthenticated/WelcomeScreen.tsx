@@ -4,6 +4,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import useSafeAreaViewStyleInsets from '@src/hooks/useSafeAreaViewStyleInsets'
 import buttonStyle from '@src/styles/buttonStyle'
 import useHasSeenWelcomePageMutation from '@src/hooks/useHasSeenWelcomePageMutation'
+import titleStyle from '@src/styles/titleStyle'
 
 const Welcome = () => {
   const [step, setStep] = useState(0)
@@ -43,7 +44,7 @@ const Welcome = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.logo} />
-        <Text style={styles.title}>¡Bienvenido a Terches!</Text>
+        <Text style={titleStyle}>¡Bienvenido a Terches!</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
         <Text style={styles.description}>{description}</Text>
         <Image
@@ -124,13 +125,6 @@ const styles = StyleSheet.create({
   },
   stepImage: {
     width: '90%',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    textAlign: 'center',
-    color: colors.secondary[500],
   },
   subtitle: {
     fontSize: 20,
