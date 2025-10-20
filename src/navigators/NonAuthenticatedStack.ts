@@ -19,7 +19,13 @@ const NonAuthenticatedStack = createNativeStackNavigator({
     },
     CreateUser: {
       if: useHasSeenWelcomePage,
-      screen: () => null,
+      options: {
+        headerShown: true,
+        title: 'Registrate',
+      },
+      screen: lazy(
+        () => import('@src/screens/NonAuthenticated/CreateUserScreen')
+      ),
     },
   },
 })
