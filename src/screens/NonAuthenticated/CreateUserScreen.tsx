@@ -1,4 +1,3 @@
-import ImagePicker from 'react-native-image-crop-picker'
 import PhotoCamera from '@src/assets/svg/PhotoCamera'
 import { colors } from '@src/shared/colors'
 import {
@@ -14,11 +13,18 @@ import textInputStyle from '@src/styles/textInputStyle'
 import buttonPrimaryStyle from '@src/styles/buttonPrimaryStyle'
 import buttonPrimaryTextStyle from '@src/styles/buttonPrimaryTextStyle'
 import ArrowRightAlt from '@src/assets/svg/ArrowRightAlt'
+import ImageCropPicker from 'react-native-image-crop-picker'
 
 const CreateUserScreen = () => {
   const openImagePicker = useMutation({
+    throwOnError: (error) => {
+      if (!(error instanceof Error)) {
+        return true
+      }
+      return false
+    },
     mutationFn: async () => {
-      const image = await ImagePicker.openCamera({
+      const image = await ImageCropPicker.openCamera({
         mediaType: 'photo',
         width: 500,
         height: 500,
@@ -48,6 +54,9 @@ const CreateUserScreen = () => {
           <PhotoCamera size={70} />
         )}
       </TouchableOpacity>
+      {openImagePicker.error && (
+        <Text style={styles.errorText}>{openImagePicker.error.message}</Text>
+      )}
       <View style={styles.inputView}>
         <Text style={styles.inputLabel}>Correo electronico</Text>
         <TextInput style={textInputStyle} placeholder="usuario@gmail.com" />
@@ -111,6 +120,10 @@ const styles = StyleSheet.create({
     width: '90%',
     flexDirection: 'row',
     gap: 10,
+  },
+  errorText: {
+    color: colors.error[500],
+    fontWeight: 'bold',
   },
 })
 

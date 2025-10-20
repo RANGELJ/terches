@@ -10,4 +10,7 @@ export const colors = {
   primary: {
     500: '#691423',
   },
+  error: {
+    500: '#fb2c36',
+  },
 } as const
