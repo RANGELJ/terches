@@ -8,6 +8,7 @@ import GlobalErrorScreen from '@src/screens/GlobalErrorScreen'
 import FirebaseEmulatorProvider from '@src/providers/FirebaseEmulatorProvider'
 import RootStack from '@src/navigators/RootStack'
 import { createStaticNavigation } from '@react-navigation/native'
+import ClientFacingError from '@src/errors/ClientFacingError'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,7 +17,7 @@ const queryClient = new QueryClient({
       throwOnError: true,
     },
     mutations: {
-      throwOnError: true,
+      throwOnError: (error) => !(error instanceof ClientFacingError),
     },
   },
 })

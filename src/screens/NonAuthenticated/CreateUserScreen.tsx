@@ -24,15 +24,11 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
 } from '@react-native-firebase/auth'
+import ClientFacingError from '@src/errors/ClientFacingError'
+import unknownGetErrorMessage from '@src/shared/unknownGetErrorMessage'
 
 const CreateUserScreen = () => {
   const openImagePicker = useMutation({
-    throwOnError: (error) => {
-      if (!(error instanceof Error)) {
-        return true
-      }
-      return false
-    },
     mutationFn: async () => {
       const permissionStatus = await requestPermissions(
         'android.permission.CAMERA',
@@ -62,14 +58,27 @@ const CreateUserScreen = () => {
         return
       }
 
-      const image = await ImageCropPicker.openCamera({
-        mediaType: 'photo',
-        width: 500,
-        height: 500,
-        cropping: true,
-      })
+      try {
+        const image = await ImageCropPicker.openCamera({
+          mediaType: 'photo',
+          width: 500,
+          height: 500,
+          cropping: true,
+        })
 
-      return image
+        return image
+      } catch (error) {
+        const errorMessage = unknownGetErrorMessage(error)
+        if (errorMessage?.includes('User cancelled image selection')) {
+          return undefined
+        }
+        if (errorMessage?.includes('User did not grant camera permission')) {
+          throw new ClientFacingError(
+            'La aplicacion no tiene permiso para usar la camara'
+          )
+        }
+        throw error
+      }
     },
   })
 
@@ -80,12 +89,20 @@ const CreateUserScreen = () => {
     __DEV__ ? '1234567890' : ''
   )
 
-  const createUser = useMutation({
+  const createUser = useMutation<void, ClientFacingError>({
     mutationFn: async () => {
       if (password !== passwordConfirmation) {
-        throw new Error('Las constraseñas no coinciden')
+        throw new ClientFacingError('Las constraseñas no coinciden')
       }
-      await createUserWithEmailAndPassword(getAuth(), email, password)
+      try {
+        await createUserWithEmailAndPassword(getAuth(), email, password)
+      } catch (error) {
+        const errorMessage = unknownGetErrorMessage(error)
+        if (errorMessage?.includes('[auth/email-already-in-use]')) {
+          throw new ClientFacingError('Este correo ya esta en uso')
+        }
+        throw error
+      }
     },
   })
 
@@ -149,6 +166,9 @@ const CreateUserScreen = () => {
         <Text style={buttonPrimaryTextStyle}>Siguiente</Text>
         <ArrowRightAlt size={25} fill={colors.secondary[100]} />
       </TouchableOpacity>
+      {createUser.error && (
+        <Text style={styles.errorText}>{createUser.error.message}</Text>
+      )}
     </View>
   )
 }

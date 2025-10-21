@@ -15,7 +15,6 @@ const FirebaseEmulatorProvider = ({ children }: PropsWithChildren) => {
         '@src/shared/firebaseSetupEmulators'
       )
       await firebaseSetupEmulators()
-      console.warn('Firebase emulators configured and ready')
       return null
     },
   })
