@@ -3,7 +3,6 @@ import env from '@src/env'
 
 const firebaseSetupEmulators = async () => {
   const auth = getAuth()
-  auth.useEmulator(env.AUTH_EMULATOR_URL)
   connectAuthEmulator(auth, env.AUTH_EMULATOR_URL)
 }
 
