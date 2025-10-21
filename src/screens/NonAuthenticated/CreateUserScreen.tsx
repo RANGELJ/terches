@@ -1,4 +1,5 @@
 import PhotoCamera from '@src/assets/svg/PhotoCamera'
+import ImageResizer from '@bam.tech/react-native-image-resizer'
 import { colors } from '@src/shared/colors'
 import {
   Image,
@@ -59,6 +60,7 @@ const CreateUserScreen = () => {
       }
 
       try {
+        await ImageCropPicker.clean()
         const image = await ImageCropPicker.openCamera({
           mediaType: 'photo',
           width: 500,
@@ -66,7 +68,17 @@ const CreateUserScreen = () => {
           cropping: true,
         })
 
-        return image
+        const resizedResponse = await ImageResizer.createResizedImage(
+          image.path,
+          250,
+          250,
+          'PNG',
+          100
+        )
+        console.log('resizedResponse', resizedResponse)
+        console.log('Size in mb', resizedResponse.size / (1024 * 1024))
+
+        return resizedResponse
       } catch (error) {
         const errorMessage = unknownGetErrorMessage(error)
         if (errorMessage?.includes('User cancelled image selection')) {
@@ -94,6 +106,13 @@ const CreateUserScreen = () => {
       if (password !== passwordConfirmation) {
         throw new ClientFacingError('Las constraseñas no coinciden')
       }
+
+      if (!image) {
+        throw new ClientFacingError(
+          'Se requiere una imagen de perfil para continuar'
+        )
+      }
+
       try {
         await createUserWithEmailAndPassword(getAuth(), email, password)
       } catch (error) {
@@ -116,7 +135,7 @@ const CreateUserScreen = () => {
       >
         {image ? (
           <Image
-            source={{ uri: image.path }}
+            source={{ uri: image.uri }}
             style={styles.profileButtonImage}
           />
         ) : (
