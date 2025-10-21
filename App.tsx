@@ -1,12 +1,13 @@
 import { ErrorBoundary } from 'react-error-boundary'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Suspense } from 'react'
-import Navigation from '@src/components/Navigation'
+import { lazy, Suspense, useState } from 'react'
 import SplashScreen from '@src/screens/SplashScreen'
 import FirebaseAuthUserProvider from '@src/providers/FirebaseAuthUserProvider'
 import GlobalErrorScreen from '@src/screens/GlobalErrorScreen'
 import FirebaseEmulatorProvider from '@src/providers/FirebaseEmulatorProvider'
+import RootStack from '@src/navigators/RootStack'
+import { createStaticNavigation } from '@react-navigation/native'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,6 +21,19 @@ const queryClient = new QueryClient({
   },
 })
 
+const Navigation = createStaticNavigation(RootStack)
+const DevelopScreen = lazy(() => import('@src/screens/DevelopScreen'))
+
+const AppContent = () => {
+  const [showDeveloperScreen, setShowDeveloperScreen] = useState(__DEV__)
+
+  if (showDeveloperScreen) {
+    return <DevelopScreen onExit={() => setShowDeveloperScreen(false)} />
+  }
+
+  return <Navigation />
+}
+
 const App = () => (
   <SafeAreaProvider>
     <ErrorBoundary fallback={<GlobalErrorScreen />}>
@@ -27,7 +41,7 @@ const App = () => (
         <Suspense fallback={<SplashScreen />}>
           <FirebaseEmulatorProvider>
             <FirebaseAuthUserProvider>
-              <Navigation />
+              <AppContent />
             </FirebaseAuthUserProvider>
           </FirebaseEmulatorProvider>
         </Suspense>

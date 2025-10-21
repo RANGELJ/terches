@@ -1,7 +1,6 @@
 import useDebugLogValue from '@src/hooks/useDebugLogValue'
 import useHasSeenWelcomePage from '@src/hooks/useHasSeenWelcomePage'
 import useHasSeenWelcomePageMutation from '@src/hooks/useHasSeenWelcomePageMutation'
-import useNavigation from '@src/hooks/useNavigation'
 import useSafeAreaViewStyleInsets from '@src/hooks/useSafeAreaViewStyleInsets'
 import { colors } from '@src/shared/colors'
 import buttonStyle from '@src/styles/buttonStyle'
@@ -14,9 +13,12 @@ import {
   View,
 } from 'react-native'
 
-const DevelopScreen = () => {
+type Props = {
+  onExit: () => void
+}
+
+const DevelopScreen = ({ onExit }: Props) => {
   const safeAreaStyleInsets = useSafeAreaViewStyleInsets()
-  const navigation = useNavigation<'Root'>()
   const hasSeenWelcomePage = useHasSeenWelcomePage()
   const markHasSeenWelcomePage = useHasSeenWelcomePageMutation()
   useDebugLogValue('hasSeenWelcomePage', hasSeenWelcomePage)
@@ -36,9 +38,7 @@ const DevelopScreen = () => {
         </View>
         <TouchableOpacity
           style={[buttonStyle, styles.optionButton]}
-          onPress={() => {
-            navigation.navigate('NonAuthenticated')
-          }}
+          onPress={onExit}
         >
           <Text>Continue to App</Text>
         </TouchableOpacity>
