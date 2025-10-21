@@ -1,5 +1,10 @@
 import PhotoCamera from '@src/assets/svg/PhotoCamera'
 import ImageResizer from '@bam.tech/react-native-image-resizer'
+import {
+  getStorage,
+  ref as getStorageRef,
+  putFile,
+} from '@react-native-firebase/storage'
 import { colors } from '@src/shared/colors'
 import {
   Image,
@@ -66,6 +71,7 @@ const CreateUserScreen = () => {
           width: 500,
           height: 500,
           cropping: true,
+          useFrontCamera: true,
         })
 
         const resizedResponse = await ImageResizer.createResizedImage(
@@ -75,8 +81,6 @@ const CreateUserScreen = () => {
           'PNG',
           100
         )
-        console.log('resizedResponse', resizedResponse)
-        console.log('Size in mb', resizedResponse.size / (1024 * 1024))
 
         return resizedResponse
       } catch (error) {
@@ -114,7 +118,25 @@ const CreateUserScreen = () => {
       }
 
       try {
-        await createUserWithEmailAndPassword(getAuth(), email, password)
+        const { user } = await createUserWithEmailAndPassword(
+          getAuth(),
+          email,
+          password
+        )
+
+        console.log('Size in bytes', image.size)
+        console.log('Size in mb', image.size / (1024 * 1024))
+
+        const storageRef = getStorageRef(
+          getStorage(),
+          `/ProfilePictures/${user.uid}.png`
+        )
+
+        const task = putFile(storageRef, image.uri)
+
+        task.on('state_changed', (taskSnapshot) => {
+          console.log('taskSnapshot', taskSnapshot)
+        })
       } catch (error) {
         const errorMessage = unknownGetErrorMessage(error)
         if (errorMessage?.includes('[auth/email-already-in-use]')) {
