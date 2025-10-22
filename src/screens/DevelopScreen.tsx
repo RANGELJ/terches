@@ -1,4 +1,6 @@
+import { getAuth, signOut } from '@react-native-firebase/auth'
 import useDebugLogValue from '@src/hooks/useDebugLogValue'
+import useFirebaseAuthUser from '@src/hooks/useFirebaseAuthUser'
 import useHasSeenWelcomePage from '@src/hooks/useHasSeenWelcomePage'
 import useHasSeenWelcomePageMutation from '@src/hooks/useHasSeenWelcomePageMutation'
 import useSafeAreaViewStyleInsets from '@src/hooks/useSafeAreaViewStyleInsets'
@@ -18,6 +20,7 @@ type Props = {
 }
 
 const DevelopScreen = ({ onExit }: Props) => {
+  const firebaseUser = useFirebaseAuthUser()
   const safeAreaStyleInsets = useSafeAreaViewStyleInsets()
   const hasSeenWelcomePage = useHasSeenWelcomePage()
   const markHasSeenWelcomePage = useHasSeenWelcomePageMutation()
@@ -36,6 +39,16 @@ const DevelopScreen = ({ onExit }: Props) => {
             onValueChange={markHasSeenWelcomePage.mutate}
           />
         </View>
+        {firebaseUser && (
+          <TouchableOpacity
+            style={[buttonStyle, styles.optionButton]}
+            onPress={() => {
+              signOut(getAuth())
+            }}
+          >
+            <Text>Logout</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={[buttonStyle, styles.optionButton]}
           onPress={onExit}

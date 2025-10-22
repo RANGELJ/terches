@@ -8,6 +8,7 @@ export const colors = {
     500: '#303030',
   },
   primary: {
+    100: '#d2b9bd',
     500: '#691423',
   },
   error: {

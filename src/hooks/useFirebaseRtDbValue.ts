@@ -10,7 +10,7 @@ import { get, getDatabase, ref } from '@react-native-firebase/database'
 const useFirebaseRtDbValue = <T>(path: string) => {
   const queryKey: ReactQueryKey = ['firebase/database', 'value', { path }]
 
-  const { data } = useSuspenseQuery<T>({
+  const { data } = useSuspenseQuery<T | null>({
     queryKey,
     queryFn: async () => {
       const database = getDatabase()
